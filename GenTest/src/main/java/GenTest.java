@@ -24,15 +24,15 @@ public class GenTest {
     public static int Start_Date = 8;
     public static int End_Date = 21;
 
-    public static class LogTextOutputFormat extends TextOutputFormat<Text, IntWritable> {
+    public static class LogTextOutputFormat extends TextOutputFormat<Text, IntWritable> { //设置输出文件格式
         @Override
         public Path getDefaultWorkFile(TaskAttemptContext context, String extension) {
-            return new Path(getOutputName(context) + ".txt");
+            return new Path(getOutputName(context) + ".txt"); //接口名.txt
         }
 
     }
 
-    public static class TimeTable implements Writable {
+    public static class TimeTable implements Writable { //构建一个Timetable类，来记录某个接口的21日访问次数
 
         private int Day_Length = End_Date - Start_Date + 1; //TODO: ..
         private int[][] Hour_Data = new int[24][Day_Length];
@@ -93,7 +93,7 @@ public class GenTest {
                     return ;
                 t.Add_Info(Integer.parseInt(Hour_Key), Integer.parseInt(Day_Key), 1);
                 Text Url_Text = new Text(Url_Key);
-                context.write(Url_Text, t);
+                context.write(Url_Text, t); //map 阶段提交对应的key:接口类型，value:对应21日各时段访问数据。
 
             }
 
@@ -115,7 +115,7 @@ public class GenTest {
                     }
             }
             context.write(key,result);
-        }
+        } // 合并相同接口的数据
     }
 
     public static class GenTestReducer extends Reducer<Text,TimeTable,Text,Text> {
